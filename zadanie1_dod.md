@@ -90,7 +90,7 @@ Manifests:
     vnd.docker.reference.type:   attestation-manifest
 ```
 
-# Część manifestu, gdzie są deklaracje platform sprzętowych:
+### Część manifestu, gdzie są deklaracje platform sprzętowych:
 ``` 
   Name:        docker.io/jakubdziem/weather-app:latest@sha256:5f6f58deceacf1719907879a1c4b14cc02d216386e8504b2cf88c2e8a4f22d81
   MediaType:   application/vnd.oci.image.manifest.v1+json

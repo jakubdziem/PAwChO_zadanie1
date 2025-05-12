@@ -1,15 +1,18 @@
+# syntax=docker/dockerfile:1.4
+
 # Budowa aplikacji Java
-FROM maven:3.9.6-eclipse-temurin-21 AS build
+FROM --platform=$BUILDPLATFORM maven:3.9.6-eclipse-temurin-21 AS build
 # Autor obrazu zgodnie ze standardem OCI
 LABEL org.opencontainers.image.authors="Jakub Dziem"
 # Ustawienie katalogu roboczego
 WORKDIR /app
 # Kopiowanie pliku z zależnościami
 COPY pom.xml .
+RUN --mount=type=cache,target=/root/.m2 mvn dependency:go-offline
 #  Kopiowanie kodu źródłowego aplikacji
 COPY src ./src
 # Instalacja zależności i budowa aplikacji bez uruchamiania testów
-RUN mvn clean package -DskipTests
+RUN --mount=type=cache,target=/root/.m2 mvn clean package -DskipTests
 
 # Druga część obrazu - JRE dla uruchomienia aplikacji
 FROM eclipse-temurin:21-jre

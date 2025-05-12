@@ -1,5 +1,4 @@
-Polecenia do budowania:
-### Polecenia do budowania:
+### Polecenie do budowania:
 ``` docker build -t pogoda-app . ```
 ### Wynik działania polecenia build:
 ``` 

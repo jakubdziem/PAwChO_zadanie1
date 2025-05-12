@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #eef2f3;
+        }
+        .weather-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin: auto;
+            text-align: center;
+        }
+        img {
+            width: 64px;
+            height: 64px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="weather-card" th:if="${weather != null and badRequest == null}">
+
+    <h3 th:text="${country} + ',' + ${city}"></h3>
+    <img th:src="'https:' + ${weather.current.condition.icon}" alt="Weather Icon">
+    <h3 th:text="${weather.current.condition.text}"></h3>
+
+    <p><strong>Temperature:</strong> <span th:text="${weather.current.temp_c}"></span> °C</p>
+    <p><strong>Wind Speed:</strong> <span th:text="${weather.current.wind_kph}"></span> kph</p>
+    <p><strong>Humidity:</strong> <span th:text="${weather.current.humidity}"></span>%</p>
+    <p><strong>Pressure:</strong> <span th:text="${weather.current.pressure_mb}"></span> mb</p>
+</div>
+
+<div th:if="${weather == null or badRequest != null}">
+    <p>No weather data available.</p>
+</div>
+
+</body>
+</html>

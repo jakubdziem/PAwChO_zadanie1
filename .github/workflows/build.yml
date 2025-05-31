@@ -1,0 +1,74 @@
+name: Build, Scan and Push Docker Image to GHCR
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    env:
+      GHCR_IMAGE: ghcr.io/${{ github.repository_owner }}/PAwChO_zadanie1
+      CACHE_IMAGE: ${{ vars.DOCKERHUB_USERNAME }}/PAwChO_zadanie1
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU for multi-architecture support
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.GHCR_IMAGE }}
+          flavor: latest=false
+          tags: |
+            type=semver,pattern={{version}}
+            type=sha,format=short,prefix=sha-
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GH_TOKEN }}
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build image for CVE scanning
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64
+          load: true
+          tags: ${{ steps.meta.outputs.tags }}
+
+      - name: Perform CVE scan using Docker Scout
+        uses: docker/scout-action@v1
+        with:
+          command: cves
+          image: ${{ env.GHCR_IMAGE }}:${{ steps.meta.outputs.version }}
+          only-severities: critical,high
+          exit-code: true
+
+      - name: Push multi-architecture image to GHCR
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          cache-from: type=registry,ref=${{ env.CACHE_IMAGE }}
+          cache-to: type=registry,ref=${{ env.CACHE_IMAGE }},mode=max
+          tags: ${{ steps.meta.outputs.tags }}

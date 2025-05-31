@@ -51,14 +51,6 @@ jobs:
           load: true
           tags: ${{ steps.meta.outputs.tags }}
 
-      - name: Perform CVE scan using Docker Scout
-        uses: docker/scout-action@v1
-        with:
-          command: cves
-          image: ghcr.io/${{ github.repository_owner }}/PAwChO_zadanie1:${{ steps.meta.outputs.version }}
-          only-severities: critical,high
-          exit-code: true
-
       - name: Push multi-architecture image to GHCR
         uses: docker/build-push-action@v5
         with:
@@ -68,3 +60,13 @@ jobs:
           cache-from: type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/PAwChO_zadanie1:cache
           cache-to: type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/PAwChO_zadanie1:cache,mode=max
           tags: ${{ steps.meta.outputs.tags }}
+
+      - name: Perform CVE scan using Docker Scout
+        uses: docker/scout-action@v1
+        with:
+          command: cves
+          image: ghcr.io/${{ github.repository_owner }}/PAwChO_zadanie1:${{ steps.meta.outputs.version }}
+          only-severities: critical,high
+          exit-code: true
+
+

@@ -1,5 +1,4 @@
-Polecenia do budowania:
-### Polecenia do budowania:
+### Polecenie do budowania:
 ``` docker build -t pogoda-app . ```
 ### Wynik działania polecenia build:
 ``` 
@@ -60,3 +59,6 @@ sha256:0af0ae3ef29b6d86c023311f55b1e41e293a30cd0f6259d8dde7c1618ce0b205]'
 REPOSITORY   TAG       IMAGE ID       CREATED         SIZE
 pogoda-app   latest    14df41ea081a   7 minutes ago   309MB
 ```
+### Zrzuty ekranu potwierdzający wymaganą funkcjonalność.
+![image](https://github.com/user-attachments/assets/3d35315a-4ca9-45ec-9a9b-027eb8c27cf1)
+![image](https://github.com/user-attachments/assets/354b1293-0431-4737-97d5-092e7ef95050)

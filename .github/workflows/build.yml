@@ -24,7 +24,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{ github.repository_owner }}/PAwChO_zadanie1
+          images: ghcr.io/${{ github.repository_owner }}/pawcho_zadanie1
           flavor: latest=false
           tags: |
             type=semver,pattern={{version}}
@@ -57,15 +57,15 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          cache-from: type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/PAwChO_zadanie1:cache
-          cache-to: type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/PAwChO_zadanie1:cache,mode=max
+          cache-from: type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/pawcho_zadanie1:cache
+          cache-to: type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/pawcho_zadanie1:cache,mode=max
           tags: ${{ steps.meta.outputs.tags }}
 
       - name: Perform CVE scan using Docker Scout
         uses: docker/scout-action@v1
         with:
           command: cves
-          image: ghcr.io/${{ github.repository_owner }}/PAwChO_zadanie1:${{ steps.meta.outputs.version }}
+          image: ghcr.io/${{ github.repository_owner }}/pawcho_zadanie1:${{ steps.meta.outputs.version }}
           only-severities: critical,high
           exit-code: true
 
